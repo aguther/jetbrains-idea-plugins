@@ -1,0 +1,52 @@
+// --------------------------------------------------------------------------------------------------------------------
+plugins {
+    id 'nebula.ospackage' version '3.5.0'
+    id "de.undercouch.download" version '2.1.0'
+    id 'net.researchgate.release' version '2.3.5'
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+task downloadPackages(type: de.undercouch.gradle.tasks.download.Download) {
+    src "http://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=${ideaPluginUpdateId}"
+    dest project.file("$buildDir/downloaded/regexTester.jar")
+    onlyIfNewer true
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def targetDirectory = '/opt/jetbrains/idea'
+
+ospackage {
+    vendor = 'Sergey Evdokimov'
+    url = 'http://myregexp.com/ideaPlugin.html'
+    license = 'Apache 2.0'
+
+    summary = 'Regular Expression Tester for IntelliJ IDEA.'
+    description = 'Regular Expression Tester for IntelliJ IDEA.'
+
+    packageGroup = 'Development/Tools'
+
+    packager = 'Andreas Guther'
+
+    version = ideaPluginVersion
+    release = rpmRelease
+    arch = NOARCH
+    os = LINUX
+
+    user = 'root'
+
+    requires('jetbrains-idea', ideaMinVersion, GREATER | EQUAL)
+    //requires('jetbrains-idea', ideaMaxVersion, LESS)
+
+    into "$targetDirectory"
+
+    from(downloadPackages.dest) {
+        into 'plugins/regexTester/lib'
+    }
+}
+
+buildRpm {
+    dependsOn downloadPackages
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'clean', 'buildRpm'
