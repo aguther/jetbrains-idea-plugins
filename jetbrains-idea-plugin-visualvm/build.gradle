@@ -8,23 +8,8 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 task downloadPackages(type: de.undercouch.gradle.tasks.download.Download) {
     src "http://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=${ideaPluginUpdateId}"
-    dest project.file("$buildDir/downloaded/plugin.zip")
+    dest project.file("$buildDir/downloaded/VisualVMLauncher.jar")
     onlyIfNewer true
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-def extractionDirectory = project.file("$buildDir/extracted")
-
-task extractPackages(dependsOn: downloadPackages) {
-
-    outputs.dir extractionDirectory
-
-    doLast {
-        copy {
-            from zipTree(downloadPackages.dest)
-            into extractionDirectory
-        }
-    }
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -54,13 +39,13 @@ ospackage {
 
     into "$targetDirectory"
 
-    from("$extractionDirectory") {
-        into 'plugins'
+    from(downloadPackages.dest) {
+        into 'plugins/visualvm/lib'
     }
 }
 
 buildRpm {
-    dependsOn extractPackages
+    dependsOn downloadPackages
 }
 
 // --------------------------------------------------------------------------------------------------------------------
