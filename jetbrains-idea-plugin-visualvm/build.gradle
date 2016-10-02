@@ -9,6 +9,7 @@ task downloadPackages(type: de.undercouch.gradle.tasks.download.Download) {
     src "http://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=${ideaPluginUpdateId}"
     dest project.file("$buildDir/downloaded/VisualVMLauncher.jar")
     onlyIfNewer true
+    acceptAnyCertificate true
 }
 
 // --------------------------------------------------------------------------------------------------------------------
