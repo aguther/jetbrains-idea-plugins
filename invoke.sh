@@ -6,6 +6,11 @@ do
 	# get basename from directory
 	directory=$(basename "${directory}")
 
+	# test if we are trying to process .git directory
+	if [ "${directory}" == ".git" ]; then
+		continue
+	fi
+
 	# inform user about current status
 	echo
 	echo -------------------------------------------------------------------------------
