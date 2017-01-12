@@ -6,7 +6,7 @@ plugins {
 
 // --------------------------------------------------------------------------------------------------------------------
 task downloadPackages(type: de.undercouch.gradle.tasks.download.Download) {
-    src "https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=${ideaPluginUpdateId}"
+    src "http://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=${ideaPluginUpdateId}"
     dest project.file("$buildDir/downloaded/plugin.zip")
     onlyIfNewer true
     acceptAnyCertificate true
